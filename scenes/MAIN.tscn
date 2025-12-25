@@ -2766,7 +2766,7 @@ scale = Vector2(4.3199997, 1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
 shape = SubResource("WorldBoundaryShape2D_nr8wp")
 
-[node name="Node2D3" parent="." instance=ExtResource("15_uag27")]
+[node name="enemy_bat" parent="." instance=ExtResource("15_uag27")]
 position = Vector2(1142.0001, 208)
 scale = Vector2(1.7087777, 1.853662)
 

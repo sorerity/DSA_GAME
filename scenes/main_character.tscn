@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b24tj1r88ew7v" path="res://assets/idle_right-Sheet.png" id="1_48ufq"]
 [ext_resource type="PackedScene" uid="uid://hha6lbsgo15e" path="res://scenes/Bullet.tscn" id="1_jw0ju"]
 [ext_resource type="Texture2D" uid="uid://drv57nqyv7011" path="res://assets/jump_right-Sheet.png" id="2_uvl38"]
-[ext_resource type="Texture2D" uid="uid://hwt4xidve3gm" path="res://assets/walk_right-Sheet.png" id="2_wmkwl"]
+[ext_resource type="Texture2D" uid="uid://dio8s4h1seupc" path="res://assets/walk_right-Sheet.png" id="2_wmkwl"]
 [ext_resource type="Texture2D" uid="uid://diac6d70kknhf" path="res://assets/shoot_duck-Sheet.png" id="4_8yqgs"]
 [ext_resource type="Texture2D" uid="uid://xfs8i5sosg3v" path="res://assets/shoot_right_duck-Sheet.png" id="6_2v62t"]
 
@@ -36,8 +36,11 @@ func _physics_process(delta):
 	# Horizontal movement
 	var direction := 0.0
 	if not is_dancing:
-		direction = Input.get_axis(\"ui_left\", \"ui_right\")
-	velocity.x = direction * speed
+		direction = Input.get_axis(\"Left\", \"Right\")
+		if direction:
+			velocity.x = direction * speed
+		else: 
+			velocity.x = move_toward(velocity.x, 0, 20)
 
 	# Update facing based on movement if NOT shooting
 	if direction != 0 and not Input.is_action_pressed(\"shoot\"):
@@ -60,9 +63,6 @@ func _physics_process(delta):
 		await get_tree().create_timer(shoot_cooldown).timeout
 		can_shoot = true
 
-	# Apply sprite flip once per frame
-	sprite.flip_h = not facing_right
-
 	# Animations
 	if Input.is_action_pressed(\"shoot\") and not is_dancing:
 		sprite.play(\"shoot\")
@@ -79,6 +79,10 @@ func _physics_process(delta):
 
 	move_and_slide()
 
+	# Apply sprite flip once per frame
+	var _isLeft = velocity.x < 0 
+	sprite.flip_h = not facing_right
+	
 # Shoot bullet
 func shoot():
 	if bullet_scene == null or shoot_point == null:
