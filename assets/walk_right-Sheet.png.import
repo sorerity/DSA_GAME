@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dio8s4h1seupc"
-path="res://.godot/imported/walk_right-Sheet.png-6c217d0537a07cebde0af238cba35d36.ctex"
+path="res://.godot/imported/walk_right-Sheet.png-a0f52f65523ecf5ec4a6672c49472543.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/walk_right-Sheet.png"
-dest_files=["res://.godot/imported/walk_right-Sheet.png-6c217d0537a07cebde0af238cba35d36.ctex"]
+source_file="res://walk_right-Sheet.png"
+dest_files=["res://.godot/imported/walk_right-Sheet.png-a0f52f65523ecf5ec4a6672c49472543.ctex"]
 
 [params]
 

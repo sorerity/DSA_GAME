@@ -2699,10 +2699,10 @@ scale = Vector2(3.6489935, 3.0801234)
 texture = ExtResource("3_fr04l")
 
 [node name="player" parent="." instance=ExtResource("11_27wxa")]
-position = Vector2(1247, 46)
+position = Vector2(945, 459)
 
 [node name="Camera2D" type="Camera2D" parent="player"]
-position = Vector2(191, 267)
+position = Vector2(1, 0)
 limit_bottom = 635
 limit_smoothed = true
 position_smoothing_enabled = true
@@ -2766,9 +2766,26 @@ scale = Vector2(4.3199997, 1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
 shape = SubResource("WorldBoundaryShape2D_nr8wp")
 
-[node name="enemy_bat" parent="." instance=ExtResource("15_uag27")]
-position = Vector2(1142.0001, 208)
+[node name="Enemy_Bat" parent="." instance=ExtResource("15_uag27")]
+position = Vector2(-708.00006, -616.00006)
 scale = Vector2(1.7087777, 1.853662)
+collision_layer = 2
+collision_mask = 2
+
+[node name="Enemy_Bat3" parent="." instance=ExtResource("15_uag27")]
+position = Vector2(-621.00006, -633)
+scale = Vector2(2.1846325, 2.4652896)
+
+[node name="Enemy_Bat2" parent="." instance=ExtResource("15_uag27")]
+position = Vector2(-652, -698)
+scale = Vector2(1.7087777, 1.853662)
+
+[node name="BatOnlyCollision" type="StaticBody2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BatOnlyCollision"]
+polygon = PackedVector2Array(-670, 446, 1250, 432, 2869, 435, 2873, -666, -677, -657, -682, 458, -799, 429, -786, -812, 2967, -808, 2961, 751, -807, 785, -801, 425)
 
 [node name="BeetleSpawn" type="Marker2D" parent="."]
 position = Vector2(-416, -591)

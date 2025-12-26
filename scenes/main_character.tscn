@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b24tj1r88ew7v" path="res://assets/idle_right-Sheet.png" id="1_48ufq"]
 [ext_resource type="PackedScene" uid="uid://hha6lbsgo15e" path="res://scenes/Bullet.tscn" id="1_jw0ju"]
 [ext_resource type="Texture2D" uid="uid://drv57nqyv7011" path="res://assets/jump_right-Sheet.png" id="2_uvl38"]
-[ext_resource type="Texture2D" uid="uid://dio8s4h1seupc" path="res://assets/walk_right-Sheet.png" id="2_wmkwl"]
+[ext_resource type="Texture2D" uid="uid://hwt4xidve3gm" path="res://assets/walk_right-Sheet.png" id="2_wmkwl"]
 [ext_resource type="Texture2D" uid="uid://diac6d70kknhf" path="res://assets/shoot_duck-Sheet.png" id="4_8yqgs"]
 [ext_resource type="Texture2D" uid="uid://xfs8i5sosg3v" path="res://assets/shoot_right_duck-Sheet.png" id="6_2v62t"]
 
@@ -36,11 +36,8 @@ func _physics_process(delta):
 	# Horizontal movement
 	var direction := 0.0
 	if not is_dancing:
-		direction = Input.get_axis(\"Left\", \"Right\")
-		if direction:
-			velocity.x = direction * speed
-		else: 
-			velocity.x = move_toward(velocity.x, 0, 20)
+		direction = Input.get_axis(\"ui_left\", \"ui_right\")
+	velocity.x = direction * speed
 
 	# Update facing based on movement if NOT shooting
 	if direction != 0 and not Input.is_action_pressed(\"shoot\"):
@@ -63,6 +60,9 @@ func _physics_process(delta):
 		await get_tree().create_timer(shoot_cooldown).timeout
 		can_shoot = true
 
+	# Apply sprite flip once per frame
+	sprite.flip_h = not facing_right
+
 	# Animations
 	if Input.is_action_pressed(\"shoot\") and not is_dancing:
 		sprite.play(\"shoot\")
@@ -79,10 +79,6 @@ func _physics_process(delta):
 
 	move_and_slide()
 
-	# Apply sprite flip once per frame
-	var _isLeft = velocity.x < 0 
-	sprite.flip_h = not facing_right
-	
 # Shoot bullet
 func shoot():
 	if bullet_scene == null or shoot_point == null:
@@ -378,23 +374,25 @@ animations = [{
 "speed": 6.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_u3evn"]
-radius = 34.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_0d0nc"]
+radius = 9.358146
 
-[node name="Node2D" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D"]
 z_index = 5
+position = Vector2(-225, -414)
 script = SubResource("GDScript_48ufq")
 bullet_scene = ExtResource("1_jw0ju")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(179.5, 405.5)
+position = Vector2(0.5, -9.5)
 scale = Vector2(3.15625, 3.21875)
 sprite_frames = SubResource("SpriteFrames_wcpx6")
 animation = &"walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(178, 418)
-shape = SubResource("CircleShape2D_u3evn")
+position = Vector2(-1.5258789e-05, 5)
+scale = Vector2(3.15625, 3.21875)
+shape = SubResource("CircleShape2D_0d0nc")
 
 [node name="ShootPoint" type="Marker2D" parent="."]
-position = Vector2(148, 386)
+position = Vector2(-31, -29)

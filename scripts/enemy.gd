@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const speed = 30
+const speed = 100
 var dir: Vector2
 
 var is_bat_chase: bool
@@ -18,14 +18,13 @@ func move(delta):
 	if is_bat_chase:
 		player = Global.playerbody
 		velocity = position.direction_to(player.position) * speed
+		dir.x = abs(velocity.x) / velocity.x
 	elif !is_bat_chase:
 		velocity += dir * speed * delta
 	move_and_slide()
 
-	move_and_slide()
-
 func _on_timer_timeout() -> void:
-	$Timer.wait_time = choose([1.0, 1.5, 2.0])
+	$Timer.wait_time = choose([0.5, 0.8])
 	if !is_bat_chase:
 		dir = choose([Vector2.RIGHT, Vector2.UP, Vector2.LEFT, Vector2.DOWN])
 		print(dir)
