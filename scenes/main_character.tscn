@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b24tj1r88ew7v" path="res://assets/idle_right-Sheet.png" id="1_48ufq"]
 [ext_resource type="PackedScene" uid="uid://hha6lbsgo15e" path="res://scenes/Bullet.tscn" id="1_jw0ju"]
 [ext_resource type="Texture2D" uid="uid://drv57nqyv7011" path="res://assets/jump_right-Sheet.png" id="2_uvl38"]
-[ext_resource type="Texture2D" uid="uid://hwt4xidve3gm" path="res://assets/walk_right-Sheet.png" id="2_wmkwl"]
+[ext_resource type="Texture2D" uid="uid://dio8s4h1seupc" path="res://assets/walk_right-Sheet.png" id="2_wmkwl"]
 [ext_resource type="Texture2D" uid="uid://diac6d70kknhf" path="res://assets/shoot_duck-Sheet.png" id="4_8yqgs"]
 [ext_resource type="Texture2D" uid="uid://xfs8i5sosg3v" path="res://assets/shoot_right_duck-Sheet.png" id="6_2v62t"]
 
@@ -27,6 +27,7 @@ func _ready():
 var is_dancing := false
 var facing_right := true
 var can_shoot := true
+var bullet = preload(\"res://scenes/Bullet_2.tscn\")
 
 func _physics_process(delta):
 	# Gravity
@@ -36,8 +37,11 @@ func _physics_process(delta):
 	# Horizontal movement
 	var direction := 0.0
 	if not is_dancing:
-		direction = Input.get_axis(\"ui_left\", \"ui_right\")
-	velocity.x = direction * speed
+		direction = Input.get_axis(\"Left\", \"Right\")
+		if direction:
+			velocity.x = direction * speed
+		else:
+			velocity.x = move_toward(velocity.x, 0, 20)
 
 	# Update facing based on movement if NOT shooting
 	if direction != 0 and not Input.is_action_pressed(\"shoot\"):
@@ -81,12 +85,14 @@ func _physics_process(delta):
 
 # Shoot bullet
 func shoot():
-	if bullet_scene == null or shoot_point == null:
-		return
-	var bullet = bullet_scene.instantiate()
-	bullet.global_position = shoot_point.global_position
-	bullet.direction = Vector2.RIGHT if facing_right else Vector2.LEFT
-	get_parent().add_child(bullet)
+	if Input.is_action_pressed(\"shoot\") and Global.node_creation_parent != null and can_shoot:
+		Global.instance_node(bullet, global_position, Global.node_creation_parent)
+		$Reload_speed.start()
+		can_shoot = false
+
+
+func _on_timer_timeout() -> void:
+	can_shoot = true
 "
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qthh5"]
@@ -387,7 +393,7 @@ bullet_scene = ExtResource("1_jw0ju")
 position = Vector2(0.5, -9.5)
 scale = Vector2(3.15625, 3.21875)
 sprite_frames = SubResource("SpriteFrames_wcpx6")
-animation = &"walk"
+animation = &"dance"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1.5258789e-05, 5)
@@ -396,3 +402,9 @@ shape = SubResource("CircleShape2D_0d0nc")
 
 [node name="ShootPoint" type="Marker2D" parent="."]
 position = Vector2(-31, -29)
+
+[node name="Reload_speed" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
+
+[connection signal="timeout" from="Reload_speed" to="." method="_on_timer_timeout"]
